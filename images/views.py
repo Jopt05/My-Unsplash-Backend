@@ -1,3 +1,4 @@
+from urllib import request
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,6 +21,29 @@ class ImagesAuth(APIView):
             return Response(
                 data=serializer.data
             )
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
+class DeleteImagesAuth(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = serializers.DeleteImageSerializer
+
+    def delete(self, request, pk):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            user = request.user
+
+            if user.check_password(serializer.data["password"]):
+                Image.objects.filter(id=pk).delete()
+                return Response({
+                    "msg": "Image deleted!"
+                })
+
         else:
             return Response(
                 serializer.errors,

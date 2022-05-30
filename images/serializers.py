@@ -9,3 +9,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Image
         fields = '__all__'
+
+
+class DeleteImageSerializer(serializers.Serializer):
+    password = serializers.CharField(max_length=255)
