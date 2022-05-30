@@ -1,0 +1,1 @@
+web: gunicorn myunsplash.wsgi --log-file -
