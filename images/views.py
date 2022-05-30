@@ -1,22 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from images import serializers
 from .models import Image
 # Create your views here.
 
 
-class Images(APIView):
-
+class ImagesAuth(APIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.ImageSerializer
-
-    def get(self, request):
-        images = Image.objects.all()
-        serializer = self.serializer_class(images, many=True)
-        return Response(
-            data=serializer.data
-        )
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -33,8 +27,20 @@ class Images(APIView):
             )
 
 
-class ImagesByUser(APIView):
+class Images(APIView):
 
+    serializer_class = serializers.ImageSerializer
+
+    def get(self, request):
+        images = Image.objects.all()
+        serializer = self.serializer_class(images, many=True)
+        return Response(
+            data=serializer.data
+        )
+
+
+class ImagesByUser(APIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = serializers.ImageSerializer
 
     def get(self, request, pk):
