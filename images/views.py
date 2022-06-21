@@ -40,9 +40,20 @@ class DeleteImagesAuth(APIView):
 
             if user.check_password(serializer.data["password"]):
                 Image.objects.filter(id=pk).delete()
-                return Response({
-                    "msg": "Image deleted!"
-                })
+                return Response(
+                    {
+                        "msg": "Image deleted!",
+                    },
+                    status=status.HTTP_202_ACCEPTED
+                )
+
+            else:
+                return Response(
+                    {
+                        "msg": "Password is not correct!",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         else:
             return Response(
