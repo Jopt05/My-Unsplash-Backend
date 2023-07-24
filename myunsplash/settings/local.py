@@ -1,3 +1,5 @@
+import dj_database_url
+from decouple import config
 from .base import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -8,14 +10,9 @@ ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "myunsplashdb",
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 # Static files (CSS, JavaScript, Images)
